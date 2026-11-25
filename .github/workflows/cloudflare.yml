@@ -1,0 +1,24 @@
+name: Validate
+# A workflow template of actions-fyi/.github: a repository with a Wrangler config adds it from
+# Actions > New workflow. It dry-runs the Wrangler deployment, without deploying and without
+# Cloudflare credentials. The dry run lives in _cloudflare.yml of actions-fyi/shared-workflows;
+# see there.
+#
+# On pull requests and merge groups it is the gate; on a push to the default branch it only
+# reports. A repository that adds it gets a copy, which doesn't follow later changes to the
+# template.
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches: ["main"]
+
+permissions: {}
+
+jobs:
+  wrangler:
+    name: Wrangler
+    # What the jobs of _cloudflare.yml declare; a called job can't get more.
+    permissions:
+      contents: read # Read the Wrangler config and check the repository out
+    uses: actions-fyi/shared-workflows/.github/workflows/_cloudflare.yml@v4.2.0
